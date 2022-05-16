@@ -1,5 +1,5 @@
 # Binary Classification Problem: True/False Mutation Detection
-_Summer 2022: NeuroToolBox project under Yiyang Gong, PhD (Gong Lab)_
+_Summer 2022: NeuroToolBox project under Yiyang Gong, PhD (Gong Lab)_ <br>
 <br>
 Current Objective:  Understand the dataset. Figure out how to extract desired pieces 
 
