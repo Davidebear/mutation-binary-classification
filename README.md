@@ -2,10 +2,10 @@
 Current Objective:  Understand the dataset. Figure out how to extract desired pieces 
 
 ## Drivetrain Approach
-_Objective_:  Determine whether a SNP (single nucleotide polymorphism) is truly present or a consequence of sequencing error. Create a dicitonary of mutations associated with a given <br>
-_Levers (Inputs)_:  _Phred_ quality score, probability distribution of random sequencing error from BFP (blue fluorescent protein), error patterns <br>
-_Data needed_:  Randomly parse **high coverage** alignments into training, validation ("parameter tuning"), and test ("restricted") sets <br>
-_Model_:  First, binary classification, then maybe predictive sequence => **Read publications for insight** <br>
+- _Objective_:  Determine whether a SNP (single nucleotide polymorphism) is truly present or a consequence of sequencing error. Create a dicitonary of mutations associated with a given <br>
+- _Levers (Inputs)_:  _Phred_ quality score, probability distribution of random sequencing error from BFP (blue fluorescent protein), error patterns <br>
+- _Data needed_:  Randomly parse **high coverage** alignments into training, validation ("parameter tuning"), and test ("restricted") sets <br>
+- _Model_:  First, binary classification, then maybe predictive sequence => **Read publications for insight** <br>
 
 ## Dataset (.mat file)
 whos align3 -> 1 x 355104 <br>
