@@ -45,26 +45,28 @@ class DNA_SeqBlocks():
     
 # CURRENT ISSUE:  I'm getting an int array instead of a char array. Use pd dataframe? How do I force a char?
 def seqblock_parser(seqblock):
-    """_summary_
-
-    Args:
-        seqblock (DNA_SeqBlocks.get_seqblock): A seqblock created from the DNA_SeqBlocks class
-
-    Returns:
-        CleanSeqBlock object : Divided aspects of a SeqBlock all in proper char format
-    """
     seqblock_parsed = CleanSeqBlock()
-    total_rows = len(np.transpose(seqblock)) # is there a more efficient way?
-    total_columns = len(seqblock)
-    number_of_reads = (total_rows - 4)/2 # last three rows have intreptations, first row is non-mutated target sequence, and N quality scores for N reads
+    total_columns = len(np.transpose(seqblock)) # is there a more efficient way?
+    total_rows = len(seqblock)
+    number_of_reads = int((total_rows - 4)/2) # last three rows have intreptations, first row is non-mutated target sequence, and N quality scores for N reads
     
     seqblock_parsed.reads_count = number_of_reads;
     seqblock_parsed.seq_len = total_rows;
-    for i in range(total_rows):
-        current_seq = seqblock[i]
-        new_format = np.zeros((1,total_columns))
+    
+    
+    for i in range(0,total_rows-1):
+        # print(f" The sequenceblock input {seqblock}") #debug
+        # print(f" The m x n size of the seqblock {seqblock.shape}") #debug
+        current_seq = seqblock[i] 
+        # print(f" The ith row of the seqblock {current_seq}") #debug
+        # print(f" The m x n size of the sequence {current_seq.shape}") #debug
+        new_format = np.chararray([1,total_columns])
+        # new_format[:] = 'q' #debug
+        
+        # print(f" The 0th entry of the initialized char array {new_format[0, 0]}") #debug
+        # print(f" Its row size {len(new_format[0])}")
         for j in range(len(seqblock)):
-            new_format[j] = chr(current_seq[j])
+            new_format[0,j] = chr(int(current_seq[j]))
         if (i == 0):
             seqblock_parsed.target = new_format
         elif (i == total_rows - 1): # last row is mutations 'x', total_rows is one more than total index
@@ -73,12 +75,11 @@ def seqblock_parser(seqblock):
             seqblock_parsed.interp_consensus = new_format
         elif (i == total_rows - 3): 
             seqblock_parsed.interp_changes = new_format
-        elif (i > 0 & i < number_of_reads + 1):
+        elif (i > 0 and i < number_of_reads + 1):
             seqblock_parsed.reads.append(new_format)
         else:
             seqblock_parsed.quality.append(new_format)
-    return seqblock_parsed
-            
+    return seqblock_parsed     
     
 class CleanSeqBlock():
     def __init__(self):
