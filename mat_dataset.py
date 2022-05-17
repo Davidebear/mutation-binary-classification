@@ -69,10 +69,7 @@ def seqblock_parser(seqblock):
     number_of_reads = int((total_rows - 4)/2) # last three rows have intreptations, first row is non-mutated target sequence, and N quality scores for N reads
     
     seqblock_parsed.reads_count = number_of_reads;
-    seqblock_parsed.seq_len = total_rows;
-    
-    print(total_columns)
-    print(total_rows)
+    seqblock_parsed.seq_len = total_columns;
     
     for i in range(0,total_rows-1):
         # print(f" The sequenceblock input {seqblock}") #debug
@@ -100,7 +97,7 @@ def seqblock_parser(seqblock):
         elif (i > 0 and i < number_of_reads + 1):
             seqblock_parsed.reads.append(new_format)
         else:
-            seqblock_parsed.quality.append(new_format)
+            seqblock_parsed.qscores.append(new_format)
     return seqblock_parsed     
    
     
@@ -118,7 +115,7 @@ class CleanSeqBlock():
         self.target = 0;
         
         self.reads = [];
-        self.quality = [];
+        self.qscores = [];
         
         self.interp_changes = 0; # what is this again? 
         self.interp_consensus = 0;
