@@ -26,7 +26,7 @@ def load_matlab_file(mat_file, variable_name): # Note the double return statemen
     data = np.array(data)
     return h5py_object, data
 
-class DNA_SeqBlocks():
+class DNA_SeqBlocks(): # Loaded mat file that serves as a generator of seqblocks and ultimately CleanSeqBlock objects
     """_summary_
     Loads the mat file with DNA sequences for easy iteration through all stored DNA sequence lists of varying coverage
     """
@@ -40,11 +40,29 @@ class DNA_SeqBlocks():
         self.data = np.transpose(data)
         self.size = len(data) 
     def get_seqblock(self, number): # //TODO: make sure the default args work
+        """_summary_
+        Generates a seqblock and transposes the result. mat files store matrices in their transpose form
+
+        Args:
+            number (int): Which of the over 300,000 (self.size) seqblocks do you want? Input with MATLAB indexing
+
+        Returns:
+            np.array object: An unclean seqblock with dtype='uint8'. Further procesing to be done in seqblock_parser and into CleanSeqBlock object
+        """
         x = self.h5py_object[self.data[number-1, 0]][:, :] # //UNIQUE: 0th column because .mat file, align3 variable only has one row
         return np.transpose(x)
     
-# CURRENT ISSUE:  I'm getting an int array instead of a char array. Use pd dataframe? How do I force a char?
+#//TODO: 
 def seqblock_parser(seqblock):
+    """_summary_
+
+    Args:
+        seqblock (DNA_SeqBlocks.get_seqblock(number=)): A seqblock generated from the DNA_SeqBlocks dataset. Chooses a specified seqblock
+
+    Returns:
+        CleanSeqBlock object: Contains char arrays of cleaned aspects of each seqblock (target sequence, reads, quality, interpretations (3 types)).
+        Useable data for training, validation, testing.
+    """
     seqblock_parsed = CleanSeqBlock()
     total_columns = len(np.transpose(seqblock)) # is there a more efficient way?
     total_rows = len(seqblock)
@@ -65,6 +83,8 @@ def seqblock_parser(seqblock):
         
         # print(f" The 0th entry of the initialized char array {new_format[0, 0]}") #debug
         # print(f" Its row size {len(new_format[0])}")
+        
+        # Neatly divides data into attributes of CleanSeqBlock object based on row number.
         for j in range(len(seqblock)):
             new_format[0,j] = chr(int(current_seq[j]))
         if (i == 0):
@@ -81,7 +101,12 @@ def seqblock_parser(seqblock):
             seqblock_parsed.quality.append(new_format)
     return seqblock_parsed     
     
-class CleanSeqBlock():
+
+class CleanSeqBlock(): 
+    """_summary_
+    Houses six key sequence types from mat file and useable, clean data
+    Object of this type are initialized by seqblock_parser function.
+    """
     def __init__(self):
         self.reads_count = 0;
         self.seq_len = 0;
